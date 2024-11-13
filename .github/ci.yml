@@ -1,0 +1,41 @@
+name: CI Pipeline
+
+# Trigger the workflow on pushes to the main and edits branches and on pull requests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code from repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python environment
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      # Step 3: Install dependencies using pip3
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install -r app/requirements.txt
+
+      # Step 4: Verify pytest installation
+      - name: Verify pytest installation
+        run: |
+          pip3 show pytest
+
+      # Step 5: Run tests
+      - name: Run Flask App Tests
+        run: |
+          pytest tests/
